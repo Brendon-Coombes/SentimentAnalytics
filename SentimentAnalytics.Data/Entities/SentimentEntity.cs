@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
+using SentimentAnalytics.Data.Extensions;
 
 namespace SentimentAnalytics.Data.Entities
 {
@@ -8,8 +9,7 @@ namespace SentimentAnalytics.Data.Entities
         public SentimentEntity(string medium, DateTime dateAndTimePosted, string rawContent, double sentimentRating, string sentimentJson)
         {
             this.PartitionKey = medium;
-            this.RowKey = dateAndTimePosted.ToLongDateString();
-
+            this.RowKey = dateAndTimePosted.ToUnixTime().ToString();
             DateAndTimePosted = dateAndTimePosted;
             RawContent = rawContent;
             SentimentRating = sentimentRating;

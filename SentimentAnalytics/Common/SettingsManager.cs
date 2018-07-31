@@ -18,6 +18,11 @@ namespace SentimentAnalytics.Common
             public const string TextAnalyticsUrlKey = "TextAnalyticsUrl";
             public const string TextAnalyticsKey = "TextAnalyticsKey";
             public const string SentimentTableNameKey = "SentimentTableName";
+
+            public const string TwitterConsumer = "TwitterConsumerKey";
+            public const string TwitterConsumerSecretKey = "TwitterConsumerSecret";
+            public const string TwitterUserAccessTokenKey = "TwitterUserAccessToken";
+            public const string TwitterUserAccessSecretKey = "TwitterUserAccessSecret";
         }
 
         public static string GetConfigValue(string key)
@@ -43,6 +48,26 @@ namespace SentimentAnalytics.Common
         public static string SentimentTableName()
         {
             return GetConfigValue(Values.SentimentTableNameKey);
+        }
+
+        public static string TwitterConsumerKey()
+        {
+            return GetConfigValue(Values.TwitterConsumer);
+        }
+
+        public static string TwitterConsumerSecret()
+        {
+            return GetConfigValue(Values.TwitterConsumerSecretKey);
+        }
+
+        public static string TwitterUserAccessToken()
+        {
+            return GetConfigValue(Values.TwitterUserAccessTokenKey);
+        }
+
+        public static string TwitterUserAccessSecret()
+        {
+            return GetConfigValue(Values.TwitterUserAccessSecretKey);
         }
     }
 }

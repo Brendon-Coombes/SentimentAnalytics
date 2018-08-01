@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using SentimentAnalytics.Common;
 using SentimentAnalytics.Models;
+using Tweetinvi;
 
 namespace SentimentAnalytics
 {

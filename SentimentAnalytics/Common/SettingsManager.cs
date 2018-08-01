@@ -23,6 +23,11 @@ namespace SentimentAnalytics.Common
             public const string TwitterConsumerSecretKey = "TwitterConsumerSecret";
             public const string TwitterUserAccessTokenKey = "TwitterUserAccessToken";
             public const string TwitterUserAccessSecretKey = "TwitterUserAccessSecret";
+
+            public const string RedditAppKey = "RedditAppId";
+            public const string RedditAppSecretKey = "RedditAppSecret";
+            public const string RedditUsernameKey = "RedditUsername";
+            public const string RedditPasswordKey = "RedditPassword"; 
         }
 
         public static string GetConfigValue(string key)
@@ -68,6 +73,26 @@ namespace SentimentAnalytics.Common
         public static string TwitterUserAccessSecret()
         {
             return GetConfigValue(Values.TwitterUserAccessSecretKey);
+        }
+
+        public static string RedditAppid()
+        {
+            return GetConfigValue(Values.RedditAppKey);
+        }
+
+        public static string RedditAppSecret()
+        {
+            return GetConfigValue(Values.RedditAppSecretKey);
+        }
+
+        public static string RedditUsername()
+        {
+            return GetConfigValue(Values.RedditUsernameKey);
+        }
+
+        public static string RedditPassword()
+        {
+            return GetConfigValue(Values.RedditPasswordKey);
         }
     }
 }

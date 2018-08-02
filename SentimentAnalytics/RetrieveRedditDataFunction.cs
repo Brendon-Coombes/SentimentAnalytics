@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using RedditSharp;
+using RedditSharp.Things;
 using SentimentAnalytics.Common;
 using SentimentAnalytics.Models;
 
@@ -30,8 +31,37 @@ namespace SentimentAnalytics
                 //TODO - Get real redirect URL: 
                 BotWebAgent webAgent = new BotWebAgent(SettingsManager.RedditUsername(), SettingsManager.RedditPassword(), SettingsManager.RedditAppid(), SettingsManager.RedditAppSecret(), "http://www.example.com/unused/redirect/uri");
 
+                var reddit = new Reddit(webAgent);
+                var user = await reddit.GetUserAsync(SettingsManager.RedditUsername());
+                var comments = user.GetComments(-1);
+
+                IList<AnalyseTextRequest> analyseRequests = new List<AnalyseTextRequest>();
+                await comments.ForEachAsync(c =>
+                {
+                    analyseRequests.Add(new AnalyseTextRequest
+                    {
+                        ContentCreatedOn = c.Created,
+                        Medium = "Reddit",
+                        Text = c.Body
+                    });                   
+                });
+
                 SentimentService sentimentService = new SentimentService();
-              
+
+                foreach (var comment in analyseRequests)
+                {
+                    try
+                    {
+                        log.Info($"Getting sentiment and saving comment: {comment.Text}");
+                        var result = await sentimentService.GetSentiment(comment);
+                        await sentimentService.SaveSentimentResult(result);
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error($"{e.Message}");
+                        log.Error($"Error saving comment {comment.Text}");
+                    }
+                }
                                
                 return new OkObjectResult("Posts saved successfully");
             }
@@ -40,15 +70,6 @@ namespace SentimentAnalytics
                 log.Error("Uncaught exception occurred", e);
                 return new BadRequestObjectResult("An unexpected error occurred processing your request");
             }
-        }
-
-        //TODO move to extension and merge with Data project version.
-        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-        {
-            // Unix timestamp is seconds past epoch
-            System.DateTime dtDateTime = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds( unixTimeStamp ).ToLocalTime();
-            return dtDateTime;
         }
     }
 }
